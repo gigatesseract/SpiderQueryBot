@@ -1,8 +1,10 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
-var conf = require("secrets.json");
-var messages = require("messages.json");
+var conf = require("./secrets.json");
+var messages = require("./sites_info");
+var info = messages.info;
+
 var request = require("request");
 var telegram_url = "https://api.telegram.org/bot" + conf.token + "/";
 
@@ -14,19 +16,22 @@ var production_url = "https://spider.nitt.edu/spiderQuery";
 var base_url = local_url;
 
 app.post("/" + conf.token, function(req, res) {
-  var message = req.body.message;
+  let message = req.body.message;
   if (message.text == "/start") {
-    var keyboard = {
+    let keyboard = {
       inline_keyboard: [
         [
-          { text: "Mess site", callback_data: "mess.nitt.edu" },
-          { text: "OD Portal", callback_data: "od.nitt.edu" }
+          {
+            text: info.mess.text,
+            callback_data: info.mess.callback_data
+          },
+          { text: info.od.text, callback_data: info.od.callback_data }
         ]
       ]
     };
 
-    inlinekey.text = "Mess site";
-    inlinekey.callback_data = "Hello data";
+    // inlinekey.text = "Mess site";
+    // inlinekey.callback_data = "Hello data";
     keyboard_array.push(inlinekey);
     data = {
       chat_id: message.from.id,
