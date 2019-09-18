@@ -1,4 +1,4 @@
-export const info = {
+const info = {
   mess: {
     text: "Mess site",
     callback_data: "mess.nitt.edu",
@@ -28,9 +28,31 @@ export const info = {
     text: "Hostel site",
     callback_data: "hostel.nitt.edu",
     desc: "Hostel site for choosing hostels for second years."
+  },
+  general: {
+    text: "General Queries",
+    callback_data: "Club Spider (General)"
   }
+
 };
 
-export const messages = {
-  start: "Please which site you want to complain about/give feedback"
+const query = {
+  complaint: {
+    text: "Complaint"
+
+  },
+  feature: {
+    text: "Feature"
+  },
+  feedback: {
+    text: "Feedback"
+  }
+}
+const messages = {
+  start: "Please select a website maintained by spider",
+  query: "What do you want to do?"
 };
+
+module.exports = {
+  messages, info, query
+}
