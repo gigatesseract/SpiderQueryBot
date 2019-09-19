@@ -1,31 +1,31 @@
 var reply_messages = require("./sites_info");
 var conf = require("./secrets.json");
-var messages = reply_messages.messages;
+// var messages = reply_messages.messages;
 var info = reply_messages.info;
 var request = require("request");
-var telegram_url = "https://api.telegram.org/bot" + conf.spider_query_token + "/";
+var telegram_url =
+  "https://api.telegram.org/bot" + conf.spider_query_token + "/";
 var info = reply_messages.info;
 var messages = reply_messages.messages;
 var query = reply_messages.query;
 
-function send_greeting_sites(message, res) {
-
+function send_greeting_sites(message) {
   let keyboard = {
     keyboard: [
       [
         {
           text: info.mess.text
-
         },
         { text: info.od.text }
       ],
-      [{
-        text: info.scient.text
-
-      },
-      {
-        text: info.hostel.text
-      }],
+      [
+        {
+          text: info.scient.text
+        },
+        {
+          text: info.hostel.text
+        }
+      ],
       [
         {
           text: info.sportsfete.text
@@ -33,7 +33,6 @@ function send_greeting_sites(message, res) {
         {
           text: info.spider.text
         }
-
       ],
       [
         {
@@ -44,8 +43,7 @@ function send_greeting_sites(message, res) {
   };
   data = {
     chat_id: message.from.id,
-    text:
-      "Hello, " + message.from.first_name + "!\n" + messages.start,
+    text: "Hello, " + message.from.first_name + "!\n" + messages.start,
     reply_markup: JSON.stringify(keyboard)
   };
   // send_message("sendMessage", message.from.id, data, res);
@@ -58,7 +56,6 @@ function send_query_type(message) {
       [
         {
           text: query.complaint.text
-
         }
       ],
       [
@@ -82,21 +79,35 @@ function send_query_type(message) {
 }
 function select_site(site_name) {
   for (let site in info) {
-    if (info[site].text == site_name)
-      return info[site].callback_data;
+    if (info[site].text == site_name) return info[site].callback_data;
   }
   return null;
 }
 
-function select_query_type(query) {
-
+function select_query_type(query_string) {
+  for (let query_type in query) {
+    if (query[query_type].text === query_string) return query[query_type].text;
+  }
+  return null;
 }
+function send_final_question(message, user_map_dict) {
+  data = {
+    text: messages.reply + user_map_dict["site"] + " ?",
+    chat_id: message.from.id,
+    reply_markup: {
+      remove_keyboard: true
+    }
+  };
+  return data;
+}
+
 function handleStart(user_state_map, message) {
   user_state_map[message.from.id] = {};
   data = send_greeting_sites(message);
   return data;
 }
 async function send_message(url, data) {
+  data.parse_mode = "HTML";
 
   request.post(telegram_url + url, {
     json: data,
@@ -104,8 +115,13 @@ async function send_message(url, data) {
       return response.statusCode;
     }
   });
-
 }
 module.exports = {
-  send_greeting_sites, send_message, send_query_type, select_site, handleStart
-}
+  send_greeting_sites,
+  send_message,
+  send_query_type,
+  select_site,
+  handleStart,
+  select_query_type,
+  send_final_question
+};
