@@ -50,18 +50,13 @@ const messages = {
   start: "Please select a website maintained by spider",
   query: "What do you want to do?",
   reply: "What do you want to tell the developers of ",
-<<<<<<< HEAD
   thank_you:
     "Thank you for spending time for us! We will work on it." +
     String.fromCodePoint(0x1f601)
-=======
-  thank_you: "Thank you for spending time for us! We will work on it." + String.fromCodePoint(0x1F601)
->>>>>>> 0cf8307... feat: select type of query + emojis
 };
 
 const groups = {
   complaints_portal: -1001263486323
-<<<<<<< HEAD
 };
 module.exports = {
   messages,
@@ -69,9 +64,3 @@ module.exports = {
   query,
   groups
 };
-=======
-}
-module.exports = {
-  messages, info, query, groups
-}
->>>>>>> 0cf8307... feat: select type of query + emojis

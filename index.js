@@ -8,23 +8,9 @@ var user_state_map = {};
 var messages = require("./sites_info").messages;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-var local_url = "localhost:3000";
-var production_url = "https://spider.nitt.edu/spiderQuery";
-var base_url = local_url;
 
 app.post("/" + conf.spider_query_token, async function(req, res) {
-  // console.log(req.body);
   let message = req.body.message;
-  // console.log(message.chat);
-  // console.log("this is user state:: ", user_state_map[message.from.id]);
-  // if (user_state_map[message.from.id] === undefined || message.text == "/start") {
-  //   let data = helpers.handleStart(user_state_map, message);
-  //   console.log(data);
-  //   let statusCode = await helpers.send_message("sendMessage", data);
-  //   res.status(statusCode || 200).send();
-  // }
-
-  // console.log(message.from);
   if (message.from.id in user_state_map) {
     if (
       "query" in user_state_map[message.from.id] &&
@@ -54,7 +40,7 @@ app.post("/" + conf.spider_query_token, async function(req, res) {
     } else if ("site" in user_state_map[message.from.id]) {
       // site is already chosen
       let query = helpers.select_query_type(message.text);
-      // console.log("choosen query is", query);
+
       if (query != null) {
         user_state_map[message.from.id].query = query;
         let data = helpers.send_final_question(
@@ -72,17 +58,14 @@ app.post("/" + conf.spider_query_token, async function(req, res) {
         return;
       }
     } else {
-      //site is not choosen --> message.text has site
       let site = helpers.select_site(message.text);
 
       if (site != null) {
-        // console.log(site);
         user_state_map[message.from.id].site = site;
-        // console.log(user_state_map[message.from.id]);
         let data = helpers.send_query_type(message);
-        // console.log(data);
+
         let statusCode = await helpers.send_message("sendMessage", data);
-        // console.log(statusCode);
+
         res.status(statusCode || 200).send();
         return;
       } else {
@@ -93,18 +76,6 @@ app.post("/" + conf.spider_query_token, async function(req, res) {
         return;
       }
     }
-    // console.log("site choosen");
-
-    // }
-    // else {
-
-    // }
-    // else if (!("query" in user_state_map[message.from.id])) {
-
-    // }
-    // else {
-
-    // }
   } else {
     let data = helpers.handleStart(user_state_map, message);
 
@@ -112,12 +83,6 @@ app.post("/" + conf.spider_query_token, async function(req, res) {
     res.status(statusCode || 200).send();
     return;
   }
-  // helpers.send_message("sendMessage", message.from.id, data, res);
-  // console.log(req.body);
-  // console.log(message.data);
-  // res.status(200).send("Success");
-
-  // res.status(200).send("success");
 });
 
 app.get("/" + conf.spider_query_token, function(req, res) {
@@ -125,6 +90,5 @@ app.get("/" + conf.spider_query_token, function(req, res) {
 });
 
 app.listen(conf.port, function() {
-  // console.log(conf.spider_query_token);
-  // console.log("listening on " + conf.port);
+  console.log("listening on " + conf.port);
 });
