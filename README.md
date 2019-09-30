@@ -11,5 +11,5 @@ You can use it for your own purposes by editing the data in various files.
 - `git clone` the repository into a server.
 - Edit the metadata in `sites_info.js` according to your needs.
 - Rename secrets_example.json to `secrets.json` and populate it with your credentials.
-- Set a [Web Hook](https://core.telegram.org/bots/api#setwebhook) to the _url of the server + / + <bot token>_. This can be anything but needs to be edited accordingly in index.js file.
+- Set a [Web Hook](https://core.telegram.org/bots/api#setwebhook) to the _url of the server + / your-bot-token_. This can be anything but needs to be edited accordingly in index.js file.
 - Spawn a process manager
